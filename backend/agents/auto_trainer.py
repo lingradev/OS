@@ -1,36 +1,90 @@
-# Import fine-tuning logic for the language model
+import uuid
+import logging
+from datetime import datetime
 from backend.models.trainer import fine_tune_model
-
-# Database connector for accessing training data
 from backend.db.connection import get_db
-
-# Analytics service for retrieving prompt usage statistics
 from backend.services.analytics_service import get_most_common_prompts
 
-
-# AutoTrainer is responsible for monitoring prompt frequency and 
-# automatically triggering model fine-tuning when certain thresholds are met
 class AutoTrainer:
-    def __init__(self):
-        # Number of times a prompt must appear before it qualifies for training
-        self.threshold = 10
+    def __init__(
+        self,
+        threshold: int = 10,
+        batch_size: int = 50,
+        dry_run: bool = False,
+        include_completions: bool = False
+    ):
+        self.threshold = threshold
+        self.batch_size = batch_size
+        self.dry_run = dry_run
+        self.include_completions = include_completions
 
-    # Runs the analysis and invokes training if needed
-    def analyze_and_train(self):
-        print("[LingraOS] Running auto-training analysis...")
+        self.logger = logging.getLogger("AutoTrainer")
+        logging.basicConfig(level=logging.INFO)
 
-        # Get top 50 most used prompts with their usage counts
-        prompts = get_most_common_prompts(limit=50)
+    def analyze_and_train(self) -> dict:
+        session_id = str(uuid.uuid4())
+        self.logger.info(f"[{session_id}] Starting auto-training analysis...")
 
-        # Filter prompts that meet or exceed the threshold
-        texts_to_train = [p['prompt'] for p in prompts if p['count'] >= self.threshold]
+        try:
+            # Fetch prompt usage data
+            prompts = get_most_common_prompts(limit=self.batch_size)
 
-        # If qualifying prompts found, fine-tune the model with them
-        if texts_to_train:
-            print(f"[LingraOS] Auto-training with {len(texts_to_train)} prompts")
-            fine_tune_model(texts_to_train)
-        else:
-            print("[LingraOS] No prompts passed threshold for training.")
+            # Filter prompts based on usage threshold
+            qualified = [
+                p for p in prompts if p.get("count", 0) >= self.threshold
+            ]
+
+            if not qualified:
+                self.logger.info(f"[{session_id}] No prompts met training threshold.")
+                return {
+                    "session": session_id,
+                    "status": "skipped",
+                    "qualified": 0,
+                    "trained": 0,
+                    "timestamp": datetime.utcnow().isoformat()
+                }
+
+            if self.include_completions:
+                training_data = [
+                    {"prompt": p["prompt"], "completion": p.get("completion", "")}
+                    for p in qualified
+                ]
+            else:
+                training_data = [p["prompt"] for p in qualified]
+
+            self.logger.info(f"[{session_id}] Qualified prompts: {len(training_data)}")
+
+            # Run training
+            if not self.dry_run:
+                fine_tune_model(training_data)
+                self.logger.info(f"[{session_id}] Fine-tuning complete.")
+            else:
+                self.logger.info(f"[{session_id}] Dry-run mode enabled. Training skipped.")
+
+            return {
+                "session": session_id,
+                "status": "trained" if not self.dry_run else "dry-run",
+                "qualified": len(training_data),
+                "trained": len(training_data) if not self.dry_run else 0,
+                "timestamp": datetime.utcnow().isoformat()
+            }
+
+        except Exception as e:
+            self.logger.error(f"[{session_id}] Error during auto-training: {str(e)}")
+            return {
+                "session": session_id,
+                "status": "error",
+                "message": str(e),
+                "timestamp": datetime.utcnow().isoformat()
+            }
+
+    def set_threshold(self, new_threshold: int):
+        self.threshold = new_threshold
+        self.logger.info(f"[AutoTrainer] Threshold updated to {new_threshold}")
+
+    def set_dry_run(self, dry_run: bool):
+        self.dry_run = dry_run
+        self.logger.info(f"[AutoTrainer] Dry-run mode set to {dry_run}")
 
 
 # Initialize the auto-training engine
