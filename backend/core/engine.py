@@ -1,40 +1,87 @@
 import logging
+import time
+from datetime import datetime
 
-# Load global system settings (e.g. model paths, DB URIs, etc.)
 from backend.core.config import settings
-
-# Load the LLM model into memory
 from backend.models.loader import load_model
-
-# Initialize database connection
 from backend.db.connection import init_db
 
-# Create a named logger for Lingra
 logger = logging.getLogger("lingra")
 
 
-# SyntharaEngine is the central bootstrap class responsible for initializing
-# all core subsystems: database and LLM model.
 class SyntharaEngine:
     def __init__(self):
-        self.model = None  # Will hold the active LLM instance
-        self.db = None     # Will hold the active DB connection/session
+        self.model = None
+        self.model_meta = {}
+        self.db = None
+        self.boot_time = None
+        self.booted = False
 
-    # Bootstraps the engine: connects to DB and loads the model
-    def boot(self):
-        logger.info("[LingraOS] Booting core engine...")
-        self.db = init_db()         # Establish database connection
-        self.model = load_model()   # Load the LLM model
-        logger.info("[LingraOS] Core boot completed.")
+    def boot(self, dry_run: bool = False, debug_mode: bool = False):
+        if self.booted:
+            logger.warning("[LingraOS] Engine already booted. Skipping reinitialization.")
+            return
 
-    # Accessor for the loaded LLM model
+        start = time.time()
+        self.boot_time = datetime.utcnow().isoformat()
+        logger.info(f"[LingraOS] Boot sequence initiated @ {self.boot_time}")
+
+        if dry_run:
+            logger.info("[LingraOS] Dry-run enabled. No subsystems will be loaded.")
+            return
+
+        try:
+            self.db = init_db()
+            logger.info("[LingraOS] Database connection initialized.")
+
+            self.model = load_model()
+            self.model_meta = self._extract_model_metadata(self.model)
+            logger.info(f"[LingraOS] Model loaded: {self.model_meta.get('name')}")
+
+            self.booted = True
+            duration = round(time.time() - start, 2)
+            logger.info(f"[LingraOS] Boot completed in {duration}s.")
+        except Exception as e:
+            logger.error(f"[LingraOS] Boot failed: {str(e)}")
+            self.booted = False
+
     def get_model(self):
-        return self.model
+        return {
+            "model": self.model,
+            "meta": self.model_meta
+        }
 
-    # Accessor for the DB connection/session
     def get_db(self):
         return self.db
 
+    def status(self):
+        return {
+            "booted": self.booted,
+            "boot_time": self.boot_time,
+            "model_loaded": self.model is not None,
+            "model_name": self.model_meta.get("name", "N/A"),
+            "db_connected": self.db is not None,
+            "debug_mode": settings.DEBUG
+        }
 
-# Global singleton instance of the Lingra Engine
-engine = LingraEngine()
+    def shutdown(self):
+        logger.info("[LingraOS] Shutting down engine subsystems...")
+        self.model = None
+        self.model_meta = {}
+        self.db = None
+        self.booted = False
+        logger.info("[LingraOS] Engine shutdown complete.")
+
+    def _extract_model_metadata(self, model):
+        try:
+            return {
+                "name": getattr(model, "name_or_path", "unknown"),
+                "type": type(model).__name__,
+                "has_tokenizer": hasattr(model, "tokenizer")
+            }
+        except Exception:
+            return {}
+
+
+# Global engine instance
+engine = SyntharaEngine()
