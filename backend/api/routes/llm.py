@@ -1,44 +1,77 @@
-# Import FastAPI router and request context
 from fastapi import APIRouter, Request
-
-# Import Pydantic for validating incoming payloads
-from pydantic import BaseModel
-
-# Import global engine instance (provides access to model and DB)
+from pydantic import BaseModel, Field
 from backend.core.engine import engine
-
-# PyTorch for tensor operations and inference control
 import torch
+import uuid
+import time
+from typing import Optional
+from datetime import datetime
 
-# Create a FastAPI router for LLM-related endpoints
 router = APIRouter()
 
-# Define expected input payload for querying the model
+
 class QueryPayload(BaseModel):
-    input: str                  # User input prompt
-    max_tokens: int = 100       # Max tokens to generate in response
-    temperature: float = 0.7    # Sampling temperature for variability
+    input: str = Field(..., description="User input prompt")
+    max_tokens: int = Field(100, ge=1, le=1024, description="Maximum tokens to generate")
+    temperature: float = Field(0.7, ge=0.0, le=1.0, description="Sampling temperature")
+    system_prompt: Optional[str] = Field(None, description="Optional system prompt for injection")
 
-# POST endpoint to query the language model
+
 @router.post("/api/llm/query")
-async def query_llm(payload: QueryPayload):
-    # Retrieve model and tokenizer from the Lingra engine
-    llm = engine.get_model()
-    model = llm["model"]
-    tokenizer = llm["tokenizer"]
+async def query_llm(payload: QueryPayload, request: Request):
+    session_id = str(uuid.uuid4())
+    start_time = time.time()
 
-    # Tokenize user input and move it to the model's device (e.g. CPU or GPU)
-    inputs = tokenizer(payload.input, return_tensors="pt").to(model.device)
+    try:
+        llm = engine.get_model()
+        model = llm["model"]
+        tokenizer = llm["tokenizer"]
+        model_name = model.name_or_path if hasattr(model, "name_or_path") else "unknown"
 
-    # Generate a response without computing gradients (inference-only)
-    with torch.no_grad():
-        outputs = model.generate(
-            **inputs,
-            max_new_tokens=payload.max_tokens,
-            temperature=payload.temperature,
-            do_sample=True
-        )
+        # Combine system prompt if provided
+        full_prompt = f"{payload.system_prompt}\n{payload.input}" if payload.system_prompt else payload.input
 
-    # Decode the model output into human-readable text
-    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    return {"response": response}
+        # Tokenize input
+        inputs = tokenizer(full_prompt, return_tensors="pt").to(model.device)
+        input_token_count = inputs.input_ids.shape[-1]
+
+        # Generate output
+        with torch.no_grad():
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=payload.max_tokens,
+                temperature=payload.temperature,
+                do_sample=True
+            )
+
+        # Decode result
+        generated = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        output_token_count = outputs[0].shape[-1] - input_token_count
+        duration = round(time.time() - start_time, 3)
+
+        response_data = {
+            "session_id": session_id,
+            "response": generated,
+            "meta": {
+                "input_tokens": input_token_count,
+                "output_tokens": output_token_count,
+                "total_tokens": input_token_count + output_token_count,
+                "inference_time": duration,
+                "timestamp": datetime.utcnow().isoformat(),
+                "model": model_name,
+                "client_ip": request.client.host,
+                "user_agent": request.headers.get("user-agent")
+            }
+        }
+
+        # Optional: persist this query to DB or log system
+        # log_query(session_id, full_prompt, generated, response_data["meta"])
+
+        return response_data
+
+    except Exception as e:
+        return {
+            "session_id": session_id,
+            "error": str(e),
+            "timestamp": datetime.utcnow().isoformat()
+        }
