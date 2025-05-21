@@ -1,38 +1,69 @@
-# Import HuggingFace transformer model and tokenizer classes
 from transformers import AutoModelForCausalLM, AutoTokenizer
-
-# Import optional model adapter layer (e.g., LoRA, quantization)
 from backend.models.adapter import apply_adapter
-
-# Import PyTorch for device detection and tensor control
-import torch
-
-# Load LingraOS system settings (e.g., model path or HuggingFace ID)
 from backend.core.config import settings
+import torch
+import logging
+import sys
 
-# Get the model name or path from settings
+logger = logging.getLogger("lingra.model")
+
 MODEL_NAME = settings.MODEL_NAME
 
-# Load the language model and tokenizer, apply adapters, and move to appropriate device
+def _log_model_info(model):
+    total_params = sum(p.numel() for p in model.parameters())
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    logger.info(f"[LingraOS] Model architecture: {type(model).__name__}")
+    logger.info(f"[LingraOS] Total parameters: {total_params:,}")
+    logger.info(f"[LingraOS] Trainable parameters: {trainable:,}")
+
 def load_model():
-    print("[LingraOS] Loading language model...")
+    """
+    Load a causal language model and tokenizer, apply adapters, 
+    and place on the best available device.
+    """
+    logger.info("[LingraOS] Loading language model...")
 
-    # Load tokenizer and model from HuggingFace model hub or local path
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-    model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
+    try:
+        # Load tokenizer
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+        
+        # Handle FP16 or bfloat16 if CUDA is available
+        torch_dtype = None
+        if torch.cuda.is_available():
+            if getattr(settings, "LOAD_FP16", True):
+                torch_dtype = torch.float16
+            elif getattr(settings, "LOAD_BFLOAT16", False):
+                torch_dtype = torch.bfloat16
 
-    # Optionally wrap model with adapter logic (e.g., LoRA, quantization, etc.)
-    model = apply_adapter(model)
+        # Load model
+        model = AutoModelForCausalLM.from_pretrained(
+            MODEL_NAME,
+            torch_dtype=torch_dtype,
+            device_map="auto" if torch.cuda.is_available() else None,
+        )
 
-    # Set model to inference mode
-    model.eval()
+        # Apply adapters (LoRA, quantization, etc.)
+        model = apply_adapter(model)
+        model.eval()
 
-    # Move model to GPU if available, else run on CPU
-    if torch.cuda.is_available():
-        model = model.to("cuda")
-        print("[LingraOS] Model loaded on CUDA")
-    else:
-        print("[LingraOS] Model running on CPU")
+        # Move to device explicitly if not using auto device_map
+        if not hasattr(model, "device") or model.device.type == "cpu":
+            if torch.cuda.is_available():
+                model = model.to("cuda")
+                logger.info("[LingraOS] Model moved to CUDA manually")
+            else:
+                logger.info("[LingraOS] Model will run on CPU")
 
-    # Return both model and tokenizer in a reusable dict
-    return {"model": model, "tokenizer": tokenizer}
+        # Report model info
+        _log_model_info(model)
+
+        # GPU info
+        if torch.cuda.is_available():
+            mem = torch.cuda.get_device_properties(0).total_memory / (1024 ** 3)
+            logger.info(f"[LingraOS] GPU memory available: {mem:.2f} GB")
+
+        return {"model": model, "tokenizer": tokenizer}
+
+    except Exception as e:
+        logger.error(f"[LingraOS] Failed to load model: {e}")
+        sys.exit(1)
