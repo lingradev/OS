@@ -4,8 +4,8 @@
 
 <p align="center">
   <a href="https://lingra.io">🌐 Website</a> •
-  <a href="https://x.com/xxxx">X (Twitter)</a> •
-  <a href="https://xxx.gitbook.io/lingra-os">📚 Docs</a>
+  <a href="https://x.com/LingraOS">X (Twitter)</a> •
+  <a href="https://lingra.gitbook.io/lingra-os">📚 Docs</a>
 </p>
 
 <p align="center">
