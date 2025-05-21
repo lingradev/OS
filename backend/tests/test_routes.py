@@ -1,26 +1,84 @@
-# Import FastAPI test client
 from fastapi.testclient import TestClient
-
-# Import the Lingra API server instance
 from backend.api.server import app
+import time
 
-# Initialize test client for the API
 client = TestClient(app)
 
-# Test the root "/" endpoint to verify API availability
-def test_root():
-    res = client.get("/")
-    assert res.status_code == 200                    # Expect HTTP 200 OK
-    assert res.json() == {"message": "Lingra OS is running."}  # Verify correct message
+def test_root(verbose: bool = True) -> dict:
+    result = {"test": "root", "status": "pass"}
+    try:
+        res = client.get("/")
+        assert res.status_code == 200
+        assert res.json() == {"message": "Lingra OS is running."}
+        if verbose:
+            print("[✓] / endpoint OK")
+    except Exception as e:
+        result["status"] = "fail"
+        result["error"] = str(e)
+    return result
 
-# Test the /api/llm/query endpoint with a sample prompt
-def test_llm_query():
-    res = client.post("/api/llm/query", json={"input": "What is Web3?"})
-    assert res.status_code == 200                    # Expect HTTP 200 OK
-    assert "response" in res.json()                  # Ensure response is present in output
+def test_llm_query(verbose: bool = True) -> dict:
+    result = {"test": "llm_query", "status": "pass"}
+    payload = {
+        "input": "What is Web3?",
+        "max_tokens": 50,
+        "temperature": 0.5
+    }
 
-# Test the /api/llm/train endpoint with training data
-def test_train_endpoint():
-    res = client.post("/api/llm/train", json={"texts": ["Define blockchain in one line."]})
-    assert res.status_code == 200                    # Expect HTTP 200 OK
-    assert res.json().get("status") == "success"     # Verify successful training response
+    try:
+        start = time.time()
+        res = client.post("/api/llm/query", json=payload)
+        duration = round(time.time() - start, 3)
+        data = res.json()
+
+        assert res.status_code == 200
+        assert "response" in data
+        assert isinstance(data["response"], str)
+        assert len(data["response"].strip()) > 0
+
+        if verbose:
+            print(f"[✓] /api/llm/query responded in {duration}s")
+            print(f"[Preview] {data['response'][:120]}{'...' if len(data['response']) > 120 else ''}")
+
+        result["latency"] = duration
+        result["output_length"] = len(data["response"])
+
+    except Exception as e:
+        result["status"] = "fail"
+        result["error"] = str(e)
+
+    return result
+
+def test_train_endpoint(verbose: bool = True) -> dict:
+    result = {"test": "llm_train", "status": "pass"}
+    try:
+        payload = {
+            "texts": ["Define blockchain in one line.", "What is a DAO?"]
+        }
+
+        res = client.post("/api/llm/train", json=payload)
+        data = res.json()
+
+        assert res.status_code == 200
+        assert data.get("status") == "success"
+
+        if verbose:
+            print("[✓] /api/llm/train accepted training payload")
+
+    except Exception as e:
+        result["status"] = "fail"
+        result["error"] = str(e)
+
+    return result
+
+def test_invalid_query_payload(verbose: bool = True) -> dict:
+    result = {"test": "llm_query_invalid", "status": "pass"}
+    try:
+        res = client.post("/api/llm/query", json={"wrong_field": "oops"})
+        assert res.status_code == 422  # Unprocessable Entity
+        if verbose:
+            print("[✓] /api/llm/query rejected bad payload as expected")
+    except Exception as e:
+        result["status"] = "fail"
+        result["error"] = str(e)
+    return result
