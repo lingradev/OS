@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Send a request to create a new user with the given username
 export async function createUser(username) {
-  // POST to the LingraOS /api/user/create endpoint with username payload
+  // POST to the LocentraOS /api/user/create endpoint with username payload
   const res = await axios.post("/api/user/create", { username });
 
   // Return the response data (e.g., { username, api_key })

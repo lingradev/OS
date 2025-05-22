@@ -1,12 +1,12 @@
 // Import Link component from React Router to enable client-side navigation
 import { Link } from "react-router-dom";
 
-// Main landing page for Lingra OS
+// Main landing page for LocentraOS
 export default function HomePage() {
   return (
     <div className="p-6 max-w-3xl mx-auto">
       {/* Page title */}
-      <h1 className="text-3xl font-bold mb-4">Welcome to Lingra OS</h1>
+      <h1 className="text-3xl font-bold mb-4">Welcome to LocentraOS</h1>
 
       {/* Short introduction describing the OS */}
       <p className="text-gray-700 mb-6">

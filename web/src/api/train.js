@@ -9,7 +9,7 @@ export async function trainLLM(texts = []) {
   }
 
   try {
-    // Send POST request to LingraOS training endpoint
+    // Send POST request to LocentraOS training endpoint
     const response = await axios.post("/api/llm/train", { texts });
 
     // Return the response data from the server
@@ -17,7 +17,7 @@ export async function trainLLM(texts = []) {
 
   } catch (error) {
     // Log error to console and re-throw it for the UI or caller to handle
-    console.error("[LingraOS] Training failed:", error);
+    console.error("[LocentraOS] Training failed:", error);
     throw error;
   }
 }

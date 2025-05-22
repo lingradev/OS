@@ -5,7 +5,7 @@ import TrainPage from "./pages/Train";
 import AboutPage from "./pages/About";
 import HomePage from "./pages/Home";
 
-// Main routing configuration for Lingra OS frontend
+// Main routing configuration for LocentraOS frontend
 export default function AppRoutes() {
   return (
     <Router>

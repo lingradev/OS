@@ -1,6 +1,6 @@
 // Import React's useState hook to manage local state
 import { useState } from "react";
-// Import the training API function from Lingra OS client
+// Import the training API function from LocentraOS client
 import { trainLLM } from "../api/train";
 
 // Button component to trigger fine-tuning of the model using provided texts
@@ -22,7 +22,7 @@ export default function TrainingButton({ texts }) {
     setStatus(null);     // Reset status
 
     try {
-      // Call Lingra OS backend API to fine-tune the model
+      // Call LocentraOS backend API to fine-tune the model
       const res = await trainLLM(texts);
       // Display success message from API response
       setStatus(res.message);
@@ -43,7 +43,7 @@ export default function TrainingButton({ texts }) {
         disabled={loading}
         className="px-4 py-2 bg-green-600 text-white rounded"
       >
-        {loading ? "Training..." : "Train Lingra OS"}
+        {loading ? "Training..." : "Train LocentraOS"}
       </button>
       {status && <p className="mt-2 text-sm text-gray-700">{status}</p>}
     </div>

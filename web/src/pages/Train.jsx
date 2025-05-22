@@ -7,7 +7,7 @@ import TrainingButton from "../components/TrainingButton";
 // Component to render model response
 import OutputBox from "../components/OutputBox";
 
-// Page for training or querying the Lingra OS LLM manually
+// Page for training or querying the LocentraOS LLM manually
 export default function TrainPage() {
   // Store user input for training or querying
   const [inputText, setInputText] = useState("");
@@ -28,7 +28,7 @@ export default function TrainPage() {
   return (
     <div className="max-w-3xl mx-auto p-6">
       {/* Page title */}
-      <h1 className="text-2xl font-bold mb-4">Train Lingra OS</h1>
+      <h1 className="text-2xl font-bold mb-4">Train LocentraOS</h1>
 
       {/* Input field for typing prompts or training data */}
       <textarea

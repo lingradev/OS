@@ -1,7 +1,7 @@
 // React hooks for state and side effects
 import { useEffect, useState } from "react";
 
-// Custom hook to check Lingra OS backend status
+// Custom hook to check LocentraOS backend status
 export function useStatusPing() {
   // Holds the current connection status: "Connecting...", "Online", or "Offline"
   const [status, setStatus] = useState("Connecting...");
@@ -11,7 +11,7 @@ export function useStatusPing() {
     // Function to ping the backend API and check connectivity
     const check = async () => {
       try {
-        // Attempt to call the Lingra OS root API route
+        // Attempt to call the LocentraOS root API route
         const res = await fetch("/api");
         const json = await res.json();
         // If API responds with a valid message, set status to Online

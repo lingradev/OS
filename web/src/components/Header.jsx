@@ -1,7 +1,7 @@
 // Import React Router hooks for navigation and route tracking
 import { Link, useLocation } from "react-router-dom";
 
-// Top navigation bar for the Lingra OS web UI
+// Top navigation bar for the LocentraOS web UI
 export default function Header() {
   // Get current route to highlight the active nav link
   const { pathname } = useLocation();
@@ -22,7 +22,7 @@ export default function Header() {
     <header className="w-full border-b bg-white sticky top-0 z-10 shadow-sm">
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
         {/* Branding title */}
-        <h1 className="text-xl font-bold text-blue-700">Lingra OS</h1>
+        <h1 className="text-xl font-bold text-blue-700">LocentraOS</h1>
 
         {/* Navigation menu */}
         <nav className="flex gap-4">

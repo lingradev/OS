@@ -9,7 +9,7 @@ export async function queryLLM(input, options = {}) {
     temperature: options.temperature || 0.7,     // Default temperature
   };
 
-  // POST the query to the Lingra API
+  // POST the query to the Locentra API
   const res = await axios.post("/api/llm/query", payload);
 
   // Return the API response

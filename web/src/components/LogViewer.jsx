@@ -1,7 +1,7 @@
 // React hooks for local state and lifecycle effects
 import { useState, useEffect } from "react";
 
-// LogViewer component displays real-time system logs from Lingra OS
+// LogViewer component displays real-time system logs from LocentraOS
 export default function LogViewer() {
   // State to store the list of logs fetched from the API
   const [logs, setLogs] = useState([]);
@@ -26,7 +26,7 @@ export default function LogViewer() {
   // Render a styled scrollable log box
   return (
     <div className="mt-6 bg-black text-green-400 p-4 rounded text-sm h-60 overflow-y-scroll">
-      <h2 className="font-bold text-white mb-2">Lingra Logs</h2>
+      <h2 className="font-bold text-white mb-2">Locentra Logs</h2>
       <pre className="whitespace-pre-wrap">
         {logs.length > 0 ? logs.join("\n") : "Waiting for logs..."}
       </pre>

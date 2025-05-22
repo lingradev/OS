@@ -1,11 +1,11 @@
 // Import React state management
 import { useState } from "react";
-// Import Lingra OS LLM query API function
+// Import LocentraOS LLM query API function
 import { queryLLM } from "@/api/llm";
 // Import reusable output rendering component
 import OutputBox from "@/components/OutputBox";
 
-// Dedicated page for sending prompts to Lingra OS and receiving LLM output
+// Dedicated page for sending prompts to LocentraOS and receiving LLM output
 export default function QueryPage() {
   // User input prompt
   const [prompt, setPrompt] = useState("");
@@ -18,7 +18,7 @@ export default function QueryPage() {
   const handleQuery = async () => {
     if (!prompt.trim()) return; // Ignore empty prompts
     setLoading(true);           // Enter loading state
-    const result = await queryLLM(prompt); // Call Lingra LLM
+    const result = await queryLLM(prompt); // Call Locentra LLM
     setResponse(result.response);          // Store response for display
     setLoading(false);          // Exit loading state
   };
@@ -26,7 +26,7 @@ export default function QueryPage() {
   return (
     <div className="max-w-3xl mx-auto p-6">
       {/* Page title */}
-      <h1 className="text-2xl font-bold mb-4">Query Lingra OS</h1>
+      <h1 className="text-2xl font-bold mb-4">Query LocentraOS</h1>
 
       {/* Input textarea for writing LLM prompt */}
       <textarea

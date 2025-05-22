@@ -1,6 +1,6 @@
 // React hook for managing local component state
 import { useState } from "react";
-// Axios is used for making HTTP requests to the Lingra OS API
+// Axios is used for making HTTP requests to the LocentraOS API
 import axios from "axios";
 
 // Main interactive component for querying the LLM and viewing its response
@@ -12,7 +12,7 @@ export default function TextInput() {
   // Loading state for showing spinner/feedback during API request
   const [loading, setLoading] = useState(false);
 
-  // Sends a prompt to the Lingra OS backend for generation
+  // Sends a prompt to the LocentraOS backend for generation
   const handleQuery = async () => {
     if (!input.trim()) return; // Ignore empty/whitespace prompts
     setLoading(true);          // Set loading while waiting for API response
@@ -28,7 +28,7 @@ export default function TextInput() {
     } catch (err) {
       // Log error and show fallback message to user
       console.error("LLM query failed:", err);
-      setOutput("Error: Unable to reach Lingra OS");
+      setOutput("Error: Unable to reach LocentraOS");
     } finally {
       setLoading(false); // Reset loading state when request finishes
     }
@@ -50,13 +50,13 @@ export default function TextInput() {
         onChange={(e) => setInput(e.target.value)}
       />
 
-      {/* Button to send the input to Lingra OS */}
+      {/* Button to send the input to LocentraOS */}
       <button
         className="mt-2 px-4 py-2 bg-blue-600 text-white rounded"
         onClick={handleQuery}
         disabled={loading}
       >
-        {loading ? "Processing..." : "Send to Lingra OS"}
+        {loading ? "Processing..." : "Send to LocentraOS"}
       </button>
 
       {/* Output block shown only when a model response exists */}

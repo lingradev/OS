@@ -1,7 +1,7 @@
 // Import React hooks for state and lifecycle handling
 import { useState, useEffect } from "react";
 
-// StatusBar component for Lingra OS
+// StatusBar component for LocentraOS
 // It pings the backend API periodically and displays the connection status
 export default function StatusBar() {
   // Initialize connection status with default value
@@ -9,7 +9,7 @@ export default function StatusBar() {
 
   // useEffect runs once on component mount
   useEffect(() => {
-    // Check connectivity with the Lingra OS backend
+    // Check connectivity with the LocentraOS backend
     const check = async () => {
       try {
         // Send a GET request to the root API endpoint
@@ -35,7 +35,7 @@ export default function StatusBar() {
   // Render the floating status bar in bottom-right corner
   return (
     <div className="fixed bottom-4 right-4 px-3 py-1 rounded bg-black text-white text-xs shadow">
-      Lingra OS: {status}
+      LocentraOS: {status}
     </div>
   );
 }

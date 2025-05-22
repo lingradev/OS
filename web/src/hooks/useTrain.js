@@ -1,6 +1,6 @@
 // Import React state hooks
 import { useState } from "react";
-// Import the LLM training API client from Lingra's frontend API layer
+// Import the LLM training API client from Locentra's frontend API layer
 import { trainLLM } from "@/api/llm";
 
 // Custom React hook for triggering LLM training and tracking status
@@ -11,7 +11,7 @@ export function useTrain() {
   const [loading, setLoading] = useState(false);
 
   // Main training function
-  // Accepts a list of input texts and sends them to the Lingra training endpoint
+  // Accepts a list of input texts and sends them to the Locentra training endpoint
   const train = async (texts) => {
     setLoading(true); // Begin loading state
     try {

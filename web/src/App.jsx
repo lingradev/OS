@@ -7,7 +7,7 @@ import Header from "./components/Header";
 // Import global styles (Tailwind-based)
 import "./styles/globals.css";
 
-// Main application wrapper for Lingra OS
+// Main application wrapper for LocentraOS
 export default function App() {
   return (
     <div className="min-h-screen bg-white text-black">
