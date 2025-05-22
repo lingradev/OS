@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# === LingraOS Server Startup Script ===
+# === LocentraOS Server Startup Script ===
 # Author: Core Maintainer
 # Version: 1.1
 
@@ -37,7 +37,7 @@ done
 # Print banner
 echo ""
 echo "──────────────────────────────────────────────"
-echo "🧠 [LingraOS] Launching API Server"
+echo "🧠 [LocentraOS] Launching API Server"
 echo "📅 Timestamp: $TIMESTAMP"
 echo "🔐 Session ID: $SESSION_ID"
 echo "🌐 Mode: $MODE"

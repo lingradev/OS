@@ -15,7 +15,7 @@ def estimate_tokens(texts):
         return -1
 
 def main():
-    parser = argparse.ArgumentParser(description="Train LingraOS using recent memory prompts")
+    parser = argparse.ArgumentParser(description="Train LocentraOS using recent memory prompts")
     parser.add_argument("--limit", type=int, default=20, help="Number of recent prompts to fetch")
     parser.add_argument("--dry-run", action="store_true", help="Run in dry mode (preview only)")
     parser.add_argument("--min-length", type=int, default=10, help="Minimum word length filter for prompts")
@@ -26,7 +26,7 @@ def main():
     start_ts = datetime.utcnow().isoformat()
     start_time = time.time()
 
-    print(f"\n[LingraOS] Training Session: {session_id}")
+    print(f"\n[LocentraOS] Training Session: {session_id}")
     print("[~] Collecting recent prompts from memory...")
 
     prompts = get_recent_prompts(limit=args.limit)

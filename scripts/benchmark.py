@@ -27,7 +27,7 @@ def benchmark_model(
     token_counts = []
     errors = 0
 
-    print(f"\n[LingraOS] Starting benchmark session: {session_id}")
+    print(f"\n[LocentraOS] Starting benchmark session: {session_id}")
 
     # Optional warm-up run to stabilize performance
     if warmup:
