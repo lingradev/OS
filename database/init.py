@@ -20,9 +20,9 @@ def main():
     session_id = str(uuid.uuid4())
     timestamp = datetime.utcnow().isoformat()
     logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger("LingraDB")
+    logger = logging.getLogger("LocentraDB")
 
-    logger.info(f"[{session_id}] Starting LingraOS database initialization...")
+    logger.info(f"[{session_id}] Starting LocentraOS database initialization...")
 
     try:
         # Initialize engine and schema
