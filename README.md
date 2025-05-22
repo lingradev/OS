@@ -3,9 +3,9 @@
 </p>
 
 <p align="center">
-  <a href="https://xxx">🌐 Website</a> •
-  <a href="https://xxx">X (Twitter)</a> •
-  <a href="https://xxx">📚 Docs</a>
+  <a href="https://locentra.io/">🌐 Website</a> •
+  <a href="https://x.com/Locentra">X (Twitter)</a> •
+  <a href="https://locentra.gitbook.io/locentra-os">📚 Docs</a>
 </p>
 
 <p align="center">
