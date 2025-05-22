@@ -8,7 +8,7 @@ from backend.utils.tokenizer import count_tokens  # Optional
 
 import logging
 
-logger = logging.getLogger("lingra.memory")
+logger = logging.getLogger("locentra.memory")
 
 
 # Log a new prompt with optional metadata
@@ -31,7 +31,7 @@ def log_prompt(
             .first()
         )
         if recent and (datetime.utcnow() - recent.created_at).seconds < 60:
-            logger.info("[LingraOS] Skipping duplicate prompt.")
+            logger.info("[LocentraOS] Skipping duplicate prompt.")
             return
 
     entry = PromptLog(
@@ -44,7 +44,7 @@ def log_prompt(
 
     db.add(entry)
     db.commit()
-    logger.info(f"[LingraOS] Logged prompt (user={user_id}, tag={tag})")
+    logger.info(f"[LocentraOS] Logged prompt (user={user_id}, tag={tag})")
 
 
 # Retrieve recent prompts with optional filters

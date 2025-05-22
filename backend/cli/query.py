@@ -5,11 +5,11 @@ import logging
 from backend.models.infer import generate_response
 from backend.core.engine import engine
 
-logger = logging.getLogger("LingraCLI")
+logger = logging.getLogger("LocentraCLI")
 logging.basicConfig(level=logging.INFO)
 
 def main():
-    parser = argparse.ArgumentParser(description="Query LingraOS LLM via CLI")
+    parser = argparse.ArgumentParser(description="Query LocentraOS LLM via CLI")
     parser.add_argument("--prompt", type=str, required=True, help="Input prompt for the model")
     parser.add_argument("--max_tokens", type=int, default=100, help="Maximum tokens to generate")
     parser.add_argument("--temperature", type=float, default=0.7, help="Sampling temperature (0.0 - 1.0)")
@@ -33,7 +33,7 @@ def main():
         return
 
     try:
-        print("[LingraOS] Generating response...")
+        print("[LocentraOS] Generating response...")
         output = generate_response(
             prompt=full_prompt,
             max_tokens=args.max_tokens,

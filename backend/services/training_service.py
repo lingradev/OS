@@ -5,7 +5,7 @@ from datetime import datetime
 
 import logging
 
-logger = logging.getLogger("lingra.training")
+logger = logging.getLogger("locentra.training")
 
 # Central training control — triggered manually, by schedule, or agent
 def run_recent_prompt_training(
@@ -57,10 +57,10 @@ def run_recent_prompt_training(
             break
 
     if not texts:
-        logger.info("[LingraOS] No valid prompts found for training.")
+        logger.info("[LocentraOS] No valid prompts found for training.")
         return {"trained": False, "samples": 0, "reason": "no_valid_prompts"}
 
-    logger.info(f"[LingraOS] Training on {len(texts)} recent prompts")
+    logger.info(f"[LocentraOS] Training on {len(texts)} recent prompts")
     fine_tune_model(texts)
 
     return {

@@ -3,7 +3,7 @@ import traceback
 from backend.models.trainer import fine_tune_model
 from backend.utils.tokenizer import count_tokens  # Optional if available
 
-# Extended unit test for validating Lingra fine-tuning pipeline
+# Extended unit test for validating Locentra fine-tuning pipeline
 def test_fine_tune_small_prompt(verbose: bool = True) -> dict:
     sample_prompts = [
         "Explain what a smart contract is in one sentence.",

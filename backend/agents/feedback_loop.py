@@ -28,7 +28,7 @@ class FeedbackLoopAgent:
 
     # Internal method that triggers fine-tuning and resets the buffer
     def _trigger_training(self):
-        print("[LingraOS] Feedback threshold reached. Fine-tuning...")
+        print("[LocentraOS] Feedback threshold reached. Fine-tuning...")
         fine_tune_model(self.feedback_buffer)
         self.feedback_buffer.clear()
 

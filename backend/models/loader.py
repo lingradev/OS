@@ -5,23 +5,23 @@ import torch
 import logging
 import sys
 
-logger = logging.getLogger("lingra.model")
+logger = logging.getLogger("locentra.model")
 
 MODEL_NAME = settings.MODEL_NAME
 
 def _log_model_info(model):
     total_params = sum(p.numel() for p in model.parameters())
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    logger.info(f"[LingraOS] Model architecture: {type(model).__name__}")
-    logger.info(f"[LingraOS] Total parameters: {total_params:,}")
-    logger.info(f"[LingraOS] Trainable parameters: {trainable:,}")
+    logger.info(f"[LocentraOS] Model architecture: {type(model).__name__}")
+    logger.info(f"[LocentraOS] Total parameters: {total_params:,}")
+    logger.info(f"[LocentraOS] Trainable parameters: {trainable:,}")
 
 def load_model():
     """
     Load a causal language model and tokenizer, apply adapters, 
     and place on the best available device.
     """
-    logger.info("[LingraOS] Loading language model...")
+    logger.info("[LocentraOS] Loading language model...")
 
     try:
         # Load tokenizer
@@ -50,9 +50,9 @@ def load_model():
         if not hasattr(model, "device") or model.device.type == "cpu":
             if torch.cuda.is_available():
                 model = model.to("cuda")
-                logger.info("[LingraOS] Model moved to CUDA manually")
+                logger.info("[LocentraOS] Model moved to CUDA manually")
             else:
-                logger.info("[LingraOS] Model will run on CPU")
+                logger.info("[LocentraOS] Model will run on CPU")
 
         # Report model info
         _log_model_info(model)
@@ -60,10 +60,10 @@ def load_model():
         # GPU info
         if torch.cuda.is_available():
             mem = torch.cuda.get_device_properties(0).total_memory / (1024 ** 3)
-            logger.info(f"[LingraOS] GPU memory available: {mem:.2f} GB")
+            logger.info(f"[LocentraOS] GPU memory available: {mem:.2f} GB")
 
         return {"model": model, "tokenizer": tokenizer}
 
     except Exception as e:
-        logger.error(f"[LingraOS] Failed to load model: {e}")
+        logger.error(f"[LocentraOS] Failed to load model: {e}")
         sys.exit(1)

@@ -1,7 +1,7 @@
 import logging
 from backend.core.config import settings
 
-logger = logging.getLogger("lingra.adapter")
+logger = logging.getLogger("locentra.adapter")
 
 # Apply adapter modifications to the base model
 def apply_adapter(model):
@@ -11,11 +11,11 @@ def apply_adapter(model):
     model_type = type(model).__name__
     strategy = getattr(settings, "ADAPTER_STRATEGY", "none").lower()
 
-    logger.info(f"[LingraOS] Adapter strategy: {strategy}")
-    logger.info(f"[LingraOS] Model type: {model_type}")
+    logger.info(f"[LocentraOS] Adapter strategy: {strategy}")
+    logger.info(f"[LocentraOS] Model type: {model_type}")
 
     if strategy == "none":
-        logger.info("[LingraOS] No adapter applied. Returning raw model.")
+        logger.info("[LocentraOS] No adapter applied. Returning raw model.")
         return model
 
     elif strategy == "lora":
@@ -25,7 +25,7 @@ def apply_adapter(model):
         return apply_quant(model)
 
     else:
-        logger.warning(f"[LingraOS] Unknown adapter strategy: {strategy}. Returning raw model.")
+        logger.warning(f"[LocentraOS] Unknown adapter strategy: {strategy}. Returning raw model.")
         return model
 
 # === Placeholder for LoRA (Low-Rank Adaptation) ===
@@ -38,10 +38,10 @@ def apply_lora(model):
         # from peft import get_peft_model, LoraConfig
         # lora_config = LoraConfig(...)
         # model = get_peft_model(model, lora_config)
-        logger.info("[LingraOS] LoRA adapter logic placeholder.")
+        logger.info("[LocentraOS] LoRA adapter logic placeholder.")
         return model
     except Exception as e:
-        logger.warning(f"[LingraOS] Failed to apply LoRA: {e}")
+        logger.warning(f"[LocentraOS] Failed to apply LoRA: {e}")
         return model
 
 # === Placeholder for Quantization ===
@@ -54,8 +54,8 @@ def apply_quant(model):
         # from transformers import BitsAndBytesConfig
         # quant_config = BitsAndBytesConfig(load_in_8bit=True)
         # model = AutoModelForCausalLM.from_pretrained(..., quantization_config=quant_config)
-        logger.info("[LingraOS] Quantization logic placeholder.")
+        logger.info("[LocentraOS] Quantization logic placeholder.")
         return model
     except Exception as e:
-        logger.warning(f"[LingraOS] Failed to apply quantization: {e}")
+        logger.warning(f"[LocentraOS] Failed to apply quantization: {e}")
         return model

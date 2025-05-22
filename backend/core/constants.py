@@ -1,4 +1,4 @@
-# LingraOS-wide constants and default settings
+# LocentraOS-wide constants and default settings
 
 # === Generation Defaults ===
 DEFAULT_TEMPERATURE = 0.7

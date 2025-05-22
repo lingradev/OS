@@ -11,7 +11,7 @@ LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 
 # Global logger
-logger = logging.getLogger("lingra")
+logger = logging.getLogger("locentra")
 logger.setLevel(logging.DEBUG if settings.DEBUG else getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO))
 
 # === FORMATTERS ===
@@ -30,7 +30,7 @@ console_handler.setFormatter(formatter)
 
 # Rotating file handler (daily rotation, keeps 7 days)
 file_handler = TimedRotatingFileHandler(
-    filename=os.path.join(LOG_DIR, "lingra.log"),
+    filename=os.path.join(LOG_DIR, "locentra.log"),
     when="midnight",
     interval=1,
     backupCount=7,
@@ -67,6 +67,6 @@ def disable_json_logs():
     memory_handler.setFormatter(formatter)
 
 # === RUNTIME CONTEXT LOG ===
-logger.info(f"Lingra logger initialized @ {datetime.utcnow().isoformat()}")
+logger.info(f"Locentra logger initialized @ {datetime.utcnow().isoformat()}")
 logger.info(f"Logging level: {logging.getLevelName(logger.level)}")
 logger.info(f"Log file: {file_handler.baseFilename}")

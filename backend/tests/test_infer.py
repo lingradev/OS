@@ -2,7 +2,7 @@ import time
 from backend.models.infer import generate_response
 from backend.utils.tokenizer import count_tokens  # Optional
 
-# Extended unit test for validating Lingra inference
+# Extended unit test for validating Locentra inference
 def test_infer_basic(verbose: bool = True, max_tokens: int = 100) -> dict:
     prompt = "Explain the function of a smart contract."
 

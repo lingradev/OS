@@ -2,7 +2,7 @@ from transformers import AutoTokenizer
 from backend.core.config import settings
 import logging
 
-logger = logging.getLogger("lingra")
+logger = logging.getLogger("locentra")
 
 # Internal singleton tokenizer instance
 _tokenizer_instance = None
@@ -15,14 +15,14 @@ def get_tokenizer():
     """
     global _tokenizer_instance, _tokenizer_meta
     if _tokenizer_instance is None:
-        logger.info(f"[LingraOS] Loading tokenizer: {settings.MODEL_NAME}")
+        logger.info(f"[LocentraOS] Loading tokenizer: {settings.MODEL_NAME}")
         _tokenizer_instance = AutoTokenizer.from_pretrained(settings.MODEL_NAME)
         _tokenizer_meta = {
             "name": settings.MODEL_NAME,
             "vocab_size": _tokenizer_instance.vocab_size,
             "type": type(_tokenizer_instance).__name__
         }
-        logger.info(f"[LingraOS] Tokenizer loaded ({_tokenizer_meta['type']}) — Vocab size: {_tokenizer_meta['vocab_size']}")
+        logger.info(f"[LocentraOS] Tokenizer loaded ({_tokenizer_meta['type']}) — Vocab size: {_tokenizer_meta['vocab_size']}")
     return _tokenizer_instance
 
 def get_tokenizer_metadata() -> dict:

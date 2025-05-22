@@ -43,7 +43,7 @@ def generate_response(
     inputs = tokenizer(cleaned_prompt, return_tensors="pt").to(device)
 
     if inputs["input_ids"].shape[1] > 1024:
-        print(f"[LingraOS] Warning: prompt length ({inputs['input_ids'].shape[1]}) may exceed context window.")
+        print(f"[LocentraOS] Warning: prompt length ({inputs['input_ids'].shape[1]}) may exceed context window.")
 
     start = time.time()
     with torch.no_grad():

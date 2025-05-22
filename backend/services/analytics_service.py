@@ -8,7 +8,7 @@ from backend.utils.tokenizer import count_tokens  # Optional if available
 
 import logging
 
-logger = logging.getLogger("lingra.analytics")
+logger = logging.getLogger("locentra.analytics")
 
 def get_most_common_prompts(
     limit: int = 20,

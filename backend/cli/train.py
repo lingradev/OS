@@ -7,7 +7,7 @@ from datetime import datetime
 from backend.models.trainer import fine_tune_model
 from backend.core.engine import engine
 
-logger = logging.getLogger("LingraCLI")
+logger = logging.getLogger("LocentraCLI")
 logging.basicConfig(level=logging.INFO)
 
 def load_txt(path: str) -> list[str]:
@@ -26,7 +26,7 @@ def estimate_tokens(texts: list[str]) -> int:
         return -1  # If tokenizer isn't available
 
 def main():
-    parser = argparse.ArgumentParser(description="Train LingraOS with custom prompts")
+    parser = argparse.ArgumentParser(description="Train LocentraOS with custom prompts")
     parser.add_argument("--file", type=str, required=True, help="Path to training data file")
     parser.add_argument("--format", type=str, choices=["txt", "jsonl"], default="txt", help="File format")
     parser.add_argument("--dry-run", action="store_true", help="Preview only, do not train")

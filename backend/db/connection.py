@@ -7,7 +7,7 @@ from contextlib import contextmanager
 from datetime import datetime
 
 # Read DB URL from environment
-DB_URL = os.getenv("DATABASE_URL", "postgresql://lingra:synthpass@localhost/synthdb")
+DB_URL = os.getenv("DATABASE_URL", "postgresql://locentra:synthpass@localhost/synthdb")
 ECHO_SQL = os.getenv("DB_ECHO", "false").lower() == "true"
 
 # Configure engine with optional echo and connection pooling
@@ -25,7 +25,7 @@ Base = declarative_base()
 # Session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-logger = logging.getLogger("lingra.db")
+logger = logging.getLogger("locentra.db")
 
 # Initialize database (used during boot or setup)
 def init_db(retry: bool = True):

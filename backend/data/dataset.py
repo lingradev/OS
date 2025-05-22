@@ -4,7 +4,7 @@ import logging
 
 from backend.utils.text_cleaner import full_clean  # Optional cleaning if available
 
-logger = logging.getLogger("lingra")
+logger = logging.getLogger("locentra")
 
 def get_training_dataset(
     texts: List[str],

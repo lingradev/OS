@@ -3,7 +3,7 @@ import json
 from typing import Any, Dict, List, Optional
 
 
-class LingraRegistry:
+class LocentraRegistry:
     def __init__(self):
         # Each key maps to a dict with value + metadata
         self._registry: Dict[str, Dict[str, Any]] = {}
@@ -80,4 +80,4 @@ class LingraRegistry:
 
 
 # Global instance of the registry
-registry = LingraRegistry()
+registry = LocentraRegistry()

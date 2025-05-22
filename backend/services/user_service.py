@@ -5,7 +5,7 @@ from uuid import uuid4
 from datetime import datetime
 import logging
 
-logger = logging.getLogger("lingra.user")
+logger = logging.getLogger("locentra.user")
 
 # === User Creation ===
 
@@ -19,7 +19,7 @@ def create_user(username: str, email: str = None) -> dict:
 
     # Check for duplicate
     if db.query(User).filter(User.username == username).first():
-        raise ValueError(f"[LingraOS] Username already exists: {username}")
+        raise ValueError(f"[LocentraOS] Username already exists: {username}")
 
     api_key = str(uuid4())
     user = User(username=username, api_key=api_key)
@@ -31,7 +31,7 @@ def create_user(username: str, email: str = None) -> dict:
     db.commit()
     db.refresh(user)
 
-    logger.info(f"[LingraOS] New user created: {username}")
+    logger.info(f"[LocentraOS] New user created: {username}")
     return {
         "username": user.username,
         "api_key": user.api_key,
@@ -58,7 +58,7 @@ def regenerate_api_key(user_id: int) -> str:
     db: Session = next(get_db())
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise ValueError(f"[LingraOS] No user found with ID: {user_id}")
+        raise ValueError(f"[LocentraOS] No user found with ID: {user_id}")
 
     user.api_key = str(uuid4())
     user.updated_at = datetime.utcnow()

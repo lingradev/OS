@@ -12,7 +12,7 @@ from backend.core.lifecycle import on_startup, on_shutdown
 
 
 # Create FastAPI instance with a custom title
-app = FastAPI(title="Lingra OS API")
+app = FastAPI(title="Locentra OS API")
 
 # Configure CORS settings (allow all origins for development)
 # In production, restrict origins to allowed domains
@@ -43,4 +43,4 @@ app.include_router(user.router)
 # Root endpoint for health check / welcome message
 @app.get("/")
 async def root():
-    return {"message": "Lingra OS is running."}
+    return {"message": "Locentra OS is running."}

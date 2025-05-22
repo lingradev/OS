@@ -9,7 +9,7 @@ def test_root(verbose: bool = True) -> dict:
     try:
         res = client.get("/")
         assert res.status_code == 200
-        assert res.json() == {"message": "Lingra OS is running."}
+        assert res.json() == {"message": "Locentra OS is running."}
         if verbose:
             print("[✓] / endpoint OK")
     except Exception as e:

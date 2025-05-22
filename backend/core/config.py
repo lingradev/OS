@@ -10,7 +10,7 @@ load_dotenv()
 # Define global config object
 class Settings:
     # Project metadata
-    PROJECT_NAME: str = "LingraOS"
+    PROJECT_NAME: str = "LocentraOS"
     VERSION: str = "0.1.0"
 
     # Environment and mode
@@ -24,7 +24,7 @@ class Settings:
     TEMPERATURE: float = float(os.getenv("TEMPERATURE", 0.7))
 
     # Database connection
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://lingra:synthpass@localhost/synthdb")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://locentra:synthpass@localhost/synthdb")
 
     # Logging configuration
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")

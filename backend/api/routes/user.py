@@ -8,7 +8,7 @@ from typing import Optional
 router = APIRouter()
 
 # Reserved usernames (can be expanded as needed)
-RESERVED_USERNAMES = {"admin", "root", "system", "llm", "lingra"}
+RESERVED_USERNAMES = {"admin", "root", "system", "llm", "locentra"}
 
 # Extended payload structure
 class CreateUserPayload(BaseModel):

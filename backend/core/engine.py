@@ -6,7 +6,7 @@ from backend.core.config import settings
 from backend.models.loader import load_model
 from backend.db.connection import init_db
 
-logger = logging.getLogger("lingra")
+logger = logging.getLogger("locentra")
 
 
 class SyntharaEngine:
@@ -19,30 +19,30 @@ class SyntharaEngine:
 
     def boot(self, dry_run: bool = False, debug_mode: bool = False):
         if self.booted:
-            logger.warning("[LingraOS] Engine already booted. Skipping reinitialization.")
+            logger.warning("[LocentraOS] Engine already booted. Skipping reinitialization.")
             return
 
         start = time.time()
         self.boot_time = datetime.utcnow().isoformat()
-        logger.info(f"[LingraOS] Boot sequence initiated @ {self.boot_time}")
+        logger.info(f"[LocentraOS] Boot sequence initiated @ {self.boot_time}")
 
         if dry_run:
-            logger.info("[LingraOS] Dry-run enabled. No subsystems will be loaded.")
+            logger.info("[LocentraOS] Dry-run enabled. No subsystems will be loaded.")
             return
 
         try:
             self.db = init_db()
-            logger.info("[LingraOS] Database connection initialized.")
+            logger.info("[LocentraOS] Database connection initialized.")
 
             self.model = load_model()
             self.model_meta = self._extract_model_metadata(self.model)
-            logger.info(f"[LingraOS] Model loaded: {self.model_meta.get('name')}")
+            logger.info(f"[LocentraOS] Model loaded: {self.model_meta.get('name')}")
 
             self.booted = True
             duration = round(time.time() - start, 2)
-            logger.info(f"[LingraOS] Boot completed in {duration}s.")
+            logger.info(f"[LocentraOS] Boot completed in {duration}s.")
         except Exception as e:
-            logger.error(f"[LingraOS] Boot failed: {str(e)}")
+            logger.error(f"[LocentraOS] Boot failed: {str(e)}")
             self.booted = False
 
     def get_model(self):
@@ -65,12 +65,12 @@ class SyntharaEngine:
         }
 
     def shutdown(self):
-        logger.info("[LingraOS] Shutting down engine subsystems...")
+        logger.info("[LocentraOS] Shutting down engine subsystems...")
         self.model = None
         self.model_meta = {}
         self.db = None
         self.booted = False
-        logger.info("[LingraOS] Engine shutdown complete.")
+        logger.info("[LocentraOS] Engine shutdown complete.")
 
     def _extract_model_metadata(self, model):
         try:

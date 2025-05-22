@@ -21,7 +21,7 @@ def fine_tune_model(
     use_early_stopping: bool = True,
     patience: int = 3
 ):
-    print("[LingraOS] Starting fine-tuning...")
+    print("[LocentraOS] Starting fine-tuning...")
 
     # Load model and tokenizer
     llm = load_model()
@@ -31,17 +31,17 @@ def fine_tune_model(
     # Clean text
     train_texts = [full_clean(t) for t in train_texts if t and len(t.strip()) > 3]
     if not train_texts:
-        raise ValueError("[LingraOS] No valid training texts provided.")
+        raise ValueError("[LocentraOS] No valid training texts provided.")
 
-    print(f"[LingraOS] Loaded {len(train_texts)} training samples.")
+    print(f"[LocentraOS] Loaded {len(train_texts)} training samples.")
 
     # Get tokenized dataset
     train_dataset = get_training_dataset(train_texts, tokenizer)
-    print(f"[LingraOS] First sample token length: {len(train_dataset[0]['input_ids'])}")
+    print(f"[LocentraOS] First sample token length: {len(train_dataset[0]['input_ids'])}")
 
     # Device check
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"[LingraOS] Using device: {device}")
+    print(f"[LocentraOS] Using device: {device}")
 
     # Timestamped output path
     timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
@@ -85,8 +85,8 @@ def fine_tune_model(
     train_output = trainer.train()
     train_loss = train_output.training_loss
 
-    print(f"[LingraOS] Fine-tuning complete. Final loss: {train_loss:.4f}")
-    print(f"[LingraOS] Model saved to: {output_path}")
+    print(f"[LocentraOS] Fine-tuning complete. Final loss: {train_loss:.4f}")
+    print(f"[LocentraOS] Model saved to: {output_path}")
 
     return {
         "model": model,
